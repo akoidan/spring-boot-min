@@ -37,6 +37,14 @@ gradle bootRun
 http://localhost:8080/swagger-ui/index.html
 
 
+### TODO
+
+timeouts/retries/circuit breakers (resilience4j)
+RestClient (Spring 6)
+Scheduling
+
+Profiles (dev, test, prod) + config precedence story
+test 
 
 ### Why I hate springboot/java
  - classnotfound exception
