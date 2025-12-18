@@ -35,7 +35,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
 
-    liquibaseRuntime "org.liquibase:liquibase:${liquibaseVersion}"
+    liquibaseRuntime "org.liquibase:liquibase-core:${liquibaseVersion}"
     liquibaseRuntime 'org.postgresql:postgresql'
     liquibaseRuntime 'org.apache.commons:commons-lang3:3.14.0'
     liquibaseRuntime 'info.picocli:picocli:4.6.1'
@@ -60,17 +60,11 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-def dbUrl = System.getenv('DB_URL')
-if (dbUrl == null || dbUrl.trim().isEmpty()) {
-    def dbName = System.getenv('POSTGRES_DB')
-    dbUrl = "jdbc:postgresql://localhost:5432/${dbName}"
-}
-
 liquibase {
     activities {
         main {
             changelogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
-            url dbUrl
+            url "jdbc:postgresql://localhost:5432/${System.getenv('POSTGRES_DB')}"
             username System.getenv('POSTGRES_USER')
             password System.getenv('POSTGRES_PASSWORD')
         }
