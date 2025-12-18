@@ -10,7 +10,6 @@ POSTGRES_USER=appuser
 POSTGRES_PASSWORD=apppassword
 POSTGRES_DB=appdb
 JWT_SECRET=change-me-to-a-long-random-secret-change-me-to-a-long-random-secret
-JWT_EXPIRATION_SECONDS=3600
 ```
 
 
