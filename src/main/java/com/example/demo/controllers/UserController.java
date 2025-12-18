@@ -1,5 +1,8 @@
-package com.example.demo;
+package com.example.demo.controllers;
 
+import com.example.demo.services.JwtService;
+import com.example.demo.db.entities.User;
+import com.example.demo.db.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

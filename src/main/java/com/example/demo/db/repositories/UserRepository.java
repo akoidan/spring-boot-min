@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.db.repositories;
 
+import com.example.demo.db.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
