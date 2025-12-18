@@ -4,6 +4,8 @@ import com.example.demo.db.entities.User;
 import com.example.demo.db.repositories.UserRepository;
 import com.example.demo.dto.CreateUserRequest;
 import com.example.demo.dto.TokenResponse;
+import com.example.demo.dto.UserResponse;
+import com.example.demo.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserMapper userMapper;
 
 
     public List<User> getUsers() {
@@ -33,15 +36,15 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User is present");
         }
 
-        String passwordHash = passwordEncoder.encode(request.password());
-        User saved = userRepository.save(new User(request.email(), request.firstName(), request.lastName(), passwordHash));
+        passwordEncoder.encode(request.password());
+        User saved = userRepository.save(userMapper.fromRequest(request));
         String token = jwtService.createTokenForUserId(saved.getId());
         return new TokenResponse(token);
     }
 
 
-    public User me(Long userId) {
-        return userRepository.findById(userId).orElseThrow();
+    public UserResponse me(Long userId) {
+        return userRepository.findById(userId).map(userMapper::toResponse).orElseThrow();
     }
 
 }

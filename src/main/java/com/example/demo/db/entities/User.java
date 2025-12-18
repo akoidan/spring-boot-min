@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -32,18 +34,10 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @JsonIgnore
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    public User(String email, String firstName, String lastName, String passwordHash) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.passwordHash = passwordHash;
-    }
 }

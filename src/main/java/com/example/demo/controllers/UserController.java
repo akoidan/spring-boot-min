@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.db.entities.User;
 import com.example.demo.dto.CreateUserRequest;
 import com.example.demo.dto.TokenResponse;
+import com.example.demo.dto.UserResponse;
 import com.example.demo.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> me(Authentication authentication) {
+    public ResponseEntity<UserResponse> me(Authentication authentication) {
         Long userId = (Long) authentication.getPrincipal();
         return ResponseEntity.ok(userService.me(userId));
     }

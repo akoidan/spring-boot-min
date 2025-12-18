@@ -18,6 +18,7 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 def liquibaseVersion = '4.31.1'
+def mapstructVersion = '1.5.5.Final'
 
 java {
     toolchain {
@@ -36,6 +37,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
 
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+
     liquibaseRuntime "org.liquibase:liquibase-core:${liquibaseVersion}"
     liquibaseRuntime 'org.postgresql:postgresql'
     liquibaseRuntime 'org.apache.commons:commons-lang3:3.14.0'
@@ -48,8 +51,14 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    testAnnotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
