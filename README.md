@@ -33,4 +33,5 @@ gradle bootRun
 ### Why I hate springboot/java
  - classnotfound exception
  - global scope for springboot services (no local isolated e.g. like in nestjs)
- - global scope of libs (lib A 1.0 depends on Lib b 1.0, lib C depends on Lib b 1.1) unless different classload pain 
+ - global scope of libs (lib A 1.0 depends on Lib b 1.0, lib C depends on Lib b 1.1) unless different classload pain
+ - gradle project is only detected in IDEA when you remove .idea and reopen it 
