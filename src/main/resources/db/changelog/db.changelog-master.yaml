@@ -1,61 +1,7 @@
 databaseChangeLog:
-  - changeSet:
-      id: 001-create-users-table
-      author: cascade
-      changes:
-        - createTable:
-            tableName: users
-            columns:
-              - column:
-                  name: id
-                  type: BIGINT
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: email
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
-                  name: first_name
-                  type: VARCHAR(100)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: last_name
-                  type: VARCHAR(100)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: created_at
-                  type: TIMESTAMP
-                  defaultValueComputed: CURRENT_TIMESTAMP
-                  constraints:
-                    nullable: false
 
-  - changeSet:
-      id: 002-add-users-password-hash
-      author: cascade
-      changes:
-        - addColumn:
-            tableName: users
-            columns:
-              - column:
-                  name: password_hash
-                  type: VARCHAR(60)
-                  constraints:
-                    nullable: true
-        - update:
-            tableName: users
-            columns:
-              - column:
-                  name: password_hash
-                  value: "__PASSWORD_NOT_SET__"
-            where: "password_hash IS NULL"
-        - addNotNullConstraint:
-            tableName: users
-            columnName: password_hash
-            columnDataType: VARCHAR(60)
+  - include:
+      file: src/main/resources/db/changelog/changes/1766053747723-create-users-table.yaml
+
+  - include:
+      file: src/main/resources/db/changelog/changes/1766053780008-add-password.yaml
