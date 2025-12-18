@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -16,7 +17,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            ObjectMapper objectMapper
+    ) throws Exception {
+        RequestResponseLoggingFilter requestResponseLoggingFilter = new RequestResponseLoggingFilter(objectMapper);
+
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -29,6 +36,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(requestResponseLoggingFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
