@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 
 import com.example.demo.db.entities.User;
+import com.example.demo.dto.CreateUserRequest;
+import com.example.demo.dto.TokenResponse;
 import com.example.demo.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class UserController {
 
 
     @PostMapping()
-    public ResponseEntity<UserService.TokenResponse> create(@RequestBody UserService.CreateUserRequest request) {
+    public ResponseEntity<TokenResponse> create(@RequestBody CreateUserRequest request) {
         return ResponseEntity.ok(userService.create(request));
     }
 

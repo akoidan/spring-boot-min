@@ -2,6 +2,8 @@ package com.example.demo.services;
 
 import com.example.demo.db.entities.User;
 import com.example.demo.db.repositories.UserRepository;
+import com.example.demo.dto.CreateUserRequest;
+import com.example.demo.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,15 +28,7 @@ public class UserService {
     }
 
     public TokenResponse create(@RequestBody CreateUserRequest request) {
-        if (request == null
-                || isBlank(request.email())
-                || isBlank(request.firstName())
-                || isBlank(request.lastName())
-                || isBlank(request.password())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "email is required");
-        }
-
-        Optional<User> existing = userRepository.findByEmail(request.email());
+         Optional<User> existing = userRepository.findByEmail(request.email());
         if (existing.isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User is present");
         }
@@ -47,17 +41,7 @@ public class UserService {
 
 
     public User me(Long userId) {
-
         return userRepository.findById(userId).orElseThrow();
     }
 
-    private boolean isBlank(String value) {
-        return value == null || value.isBlank();
-    }
-
-    public record CreateUserRequest(String email, String firstName, String lastName, String password) {
-    }
-
-    public record TokenResponse(String token) {
-    }
 }
