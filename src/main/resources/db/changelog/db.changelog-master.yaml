@@ -1,7 +1,9 @@
 databaseChangeLog:
 
   - include:
-      file: src/main/resources/db/changelog/changes/1766053747723-create-users-table.yaml
+      file: changes/1766053747723-create-users-table.yaml
+      relativeToChangelogFile: true
 
   - include:
-      file: src/main/resources/db/changelog/changes/1766053780008-add-password.yaml
+      file: changes/1766053780008-add-password.yaml
+      relativeToChangelogFile: true

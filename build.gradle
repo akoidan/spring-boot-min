@@ -1,11 +1,23 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.liquibase:liquibase-core:4.31.1'
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'org.liquibase.gradle' version '3.1.0'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
+
+def liquibaseVersion = '4.31.1'
 
 java {
     toolchain {
@@ -21,7 +33,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.liquibase:liquibase-core'
+    implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
+
+    liquibaseRuntime "org.liquibase:liquibase:${liquibaseVersion}"
+    liquibaseRuntime 'org.postgresql:postgresql'
+    liquibaseRuntime 'org.apache.commons:commons-lang3:3.14.0'
+    liquibaseRuntime 'info.picocli:picocli:4.6.1'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
@@ -41,4 +58,26 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+def dbUrl = System.getenv('DB_URL')
+if (dbUrl == null || dbUrl.trim().isEmpty()) {
+    def dbName = System.getenv('POSTGRES_DB')
+    dbUrl = "jdbc:postgresql://localhost:5432/${dbName}"
+}
+
+liquibase {
+    activities {
+        main {
+            changelogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
+            url dbUrl
+            username System.getenv('POSTGRES_USER')
+            password System.getenv('POSTGRES_PASSWORD')
+        }
+    }
+    runList = 'main'
+}
+
+tasks.register('liquibaseUpdate') {
+    dependsOn 'update'
 }

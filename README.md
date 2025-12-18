@@ -29,6 +29,7 @@ source_it .env
 ```bash
 docker volume create pg_data
 docker compose up -d 
+gradle liquibaseUpdate
 gradle bootRun
 ```
 
@@ -39,3 +40,4 @@ gradle bootRun
  - global scope of libs (lib A 1.0 depends on Lib b 1.0, lib C depends on Lib b 1.1) unless different classload pain
  - gradle project is only detected in IDEA when you remove .idea and reopen it 
  - default policy of hardcoding default env var values directly into code 
+ - build.gradle looks like a pile of trash, gathering everything in a single file
