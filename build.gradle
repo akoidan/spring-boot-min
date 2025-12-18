@@ -64,7 +64,7 @@ liquibase {
     activities {
         main {
             changelogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
-            url "jdbc:postgresql://localhost:5432/${System.getenv('POSTGRES_DB')}"
+            url System.getenv('DB_URL') ?: "jdbc:postgresql://localhost:5432/${System.getenv('POSTGRES_DB')}"
             username System.getenv('POSTGRES_USER')
             password System.getenv('POSTGRES_PASSWORD')
         }
