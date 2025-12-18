@@ -1,7 +1,6 @@
 package com.example.demo.controllers;
 
 import com.example.demo.db.entities.User;
-import com.example.demo.config.AuthPrincipal;
 import com.example.demo.dto.CreateUserRequest;
 import com.example.demo.dto.TokenResponse;
 import com.example.demo.dto.UserResponse;
@@ -12,7 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,9 +41,7 @@ public class UserController {
     @GetMapping("/me")
     @Operation(summary = "Get current user")
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<UserResponse> me(Authentication authentication) {
-        AuthPrincipal principal = (AuthPrincipal) authentication.getPrincipal();
-        Long userId = principal.userId();
+    public ResponseEntity<UserResponse> me(@AuthenticationPrincipal(expression = "userId") Long userId) {
         return ResponseEntity.ok(userService.me(userId));
     }
 }

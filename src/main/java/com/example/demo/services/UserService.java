@@ -5,9 +5,13 @@ import com.example.demo.db.repositories.UserRepository;
 import com.example.demo.dto.CreateUserRequest;
 import com.example.demo.dto.TokenResponse;
 import com.example.demo.dto.UserResponse;
+import com.example.demo.events.UserCreatedEvent;
 import com.example.demo.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,14 +29,17 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final UserMapper userMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
 
+    @Cacheable("users")
     public List<UserResponse> getUsers() {
         return userRepository.findAll().stream().map(userMapper::toResponse).toList();
     }
 
 
     @Transactional
+    @CacheEvict(value = "users", allEntries = true)
     public TokenResponse create(@RequestBody CreateUserRequest request) {
          Optional<User> existing = userRepository.findByEmail(request.email());
         if (existing.isPresent()) {
@@ -41,6 +48,7 @@ public class UserService {
 
         String passwordHash = passwordEncoder.encode(request.password());
         User saved = userRepository.save(userMapper.fromRequest(request, passwordHash));
+        eventPublisher.publishEvent(new UserCreatedEvent(saved.getId(), saved.getEmail()));
         String token = jwtService.createTokenForUserId(saved.getId(), "ROLE_USER");
         return new TokenResponse(token);
     }
