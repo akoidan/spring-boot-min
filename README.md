@@ -1,6 +1,6 @@
 
 ### Requirement
- - JDK 17
+ - java-17-openjdk
  - gradlew
  - docker, docker-compose
 Create `.env` file
