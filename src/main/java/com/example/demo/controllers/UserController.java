@@ -5,21 +5,27 @@ import com.example.demo.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/users")
+@RequestMapping("/users")
+@RestController()
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok(userService.getUsers());
+    }
+
+
+    @PostMapping()
+    public ResponseEntity<UserService.TokenResponse> create(@RequestBody UserService.CreateUserRequest request) {
+        return ResponseEntity.ok(userService.create(request));
     }
 
     @GetMapping("/me")
