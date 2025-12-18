@@ -47,3 +47,4 @@ http://localhost:8080/swagger-ui/index.html
  - build.gradle looks like a pile of trash, gathering everything in a single file
  - liquibase is trash, required speciying dependency tree manually (how the fuck should I knw it?)
  - stupid global security config, no isolation, ideally each controller should have incapsulated security 
+ - request response logging with headers is a pain in the ass, due to global filter policy, e.g. on exception is a pain to get req reponse body
