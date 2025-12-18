@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.config.AuthPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -25,16 +26,21 @@ public class JwtService {
         this.expirationSeconds = expirationSeconds;
     }
 
-    public String createTokenForUserId(long userId) {
+    public String createTokenForUserId(long userId, String role) {
         Instant now = Instant.now();
         Instant expiry = now.plusSeconds(expirationSeconds);
 
         return Jwts.builder()
                 .subject(Long.toString(userId))
+                .claim("role", role)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(expiry))
                 .signWith(key)
                 .compact();
+    }
+
+    public String createTokenForUserId(long userId) {
+        return createTokenForUserId(userId, "ROLE_USER");
     }
 
     public Long parseUserId(String token) {
@@ -49,5 +55,27 @@ public class JwtService {
             return null;
         }
         return Long.parseLong(sub);
+    }
+
+    public AuthPrincipal parsePrincipal(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        String sub = claims.getSubject();
+        if (sub == null || sub.isBlank()) {
+            return null;
+        }
+
+        Long userId = Long.parseLong(sub);
+
+        String role = claims.get("role", String.class);
+        if (role == null || role.isBlank()) {
+            role = "ROLE_USER";
+        }
+
+        return new AuthPrincipal(userId, role);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.config.AuthPrincipal;
 import com.example.demo.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,12 +40,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = auth.substring("Bearer ".length()).trim();
         try {
-            Long userId = jwtService.parseUserId(token);
-            if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            AuthPrincipal principal = jwtService.parsePrincipal(token);
+            if (principal != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        userId,
+                        principal,
                         null,
-                        List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                        List.of(new SimpleGrantedAuthority(normalizeRole(principal.role())))
                 );
                 ((UsernamePasswordAuthenticationToken) authentication)
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -55,5 +56,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String normalizeRole(String role) {
+        if (role == null || role.isBlank()) {
+            return "ROLE_USER";
+        }
+        if (role.startsWith("ROLE_")) {
+            return role;
+        }
+        return "ROLE_" + role;
     }
 }

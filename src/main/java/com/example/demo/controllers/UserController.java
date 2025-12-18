@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.db.entities.User;
+import com.example.demo.config.AuthPrincipal;
 import com.example.demo.dto.CreateUserRequest;
 import com.example.demo.dto.TokenResponse;
 import com.example.demo.dto.UserResponse;
@@ -42,7 +43,8 @@ public class UserController {
     @Operation(summary = "Get current user")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<UserResponse> me(Authentication authentication) {
-        Long userId = (Long) authentication.getPrincipal();
+        AuthPrincipal principal = (AuthPrincipal) authentication.getPrincipal();
+        Long userId = principal.userId();
         return ResponseEntity.ok(userService.me(userId));
     }
 }

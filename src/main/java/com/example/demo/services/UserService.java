@@ -41,7 +41,7 @@ public class UserService {
 
         String passwordHash = passwordEncoder.encode(request.password());
         User saved = userRepository.save(userMapper.fromRequest(request, passwordHash));
-        String token = jwtService.createTokenForUserId(saved.getId());
+        String token = jwtService.createTokenForUserId(saved.getId(), "ROLE_USER");
         return new TokenResponse(token);
     }
 
