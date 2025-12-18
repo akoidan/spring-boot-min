@@ -32,6 +32,11 @@ gradle liquibaseUpdate
 gradle bootRun
 ```
 
+### API doc
+
+http://localhost:8080/swagger-ui/index.html
+
+
 
 ### Why I hate springboot/java
  - classnotfound exception
