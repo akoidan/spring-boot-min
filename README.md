@@ -41,3 +41,4 @@ gradle bootRun
  - default policy of hardcoding default env var values directly into code 
  - build.gradle looks like a pile of trash, gathering everything in a single file
  - liquibase is trash, required speciying dependency tree manually (how the fuck should I knw it?)
+ - stupid global security config, no isolation, ideally each controller should have incapsulated security 
