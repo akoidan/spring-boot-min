@@ -4,6 +4,7 @@ import com.example.demo.db.entities.User;
 import com.example.demo.dto.CreateUserRequest;
 import com.example.demo.dto.TokenResponse;
 import com.example.demo.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,7 +27,7 @@ public class UserController {
 
 
     @PostMapping()
-    public ResponseEntity<TokenResponse> create(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<TokenResponse> create(@Valid @RequestBody CreateUserRequest request) {
         return ResponseEntity.ok(userService.create(request));
     }
 
