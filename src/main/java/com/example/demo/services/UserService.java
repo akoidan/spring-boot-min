@@ -36,8 +36,8 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User is present");
         }
 
-        passwordEncoder.encode(request.password());
-        User saved = userRepository.save(userMapper.fromRequest(request));
+        String passwordHash = passwordEncoder.encode(request.password());
+        User saved = userRepository.save(userMapper.fromRequest(request, passwordHash));
         String token = jwtService.createTokenForUserId(saved.getId());
         return new TokenResponse(token);
     }
