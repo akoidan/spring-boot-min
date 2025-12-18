@@ -35,3 +35,27 @@ databaseChangeLog:
                   defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false
+
+  - changeSet:
+      id: 002-add-users-password-hash
+      author: cascade
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: password_hash
+                  type: VARCHAR(60)
+                  constraints:
+                    nullable: true
+        - update:
+            tableName: users
+            columns:
+              - column:
+                  name: password_hash
+                  value: "__PASSWORD_NOT_SET__"
+            where: "password_hash IS NULL"
+        - addNotNullConstraint:
+            tableName: users
+            columnName: password_hash
+            columnDataType: VARCHAR(60)
