@@ -56,3 +56,4 @@ test
  - liquibase is trash, required speciying dependency tree manually (how the fuck should I knw it?)
  - stupid global security config, no isolation, ideally each controller should have incapsulated security 
  - request response logging with headers is a pain in the ass, due to global filter policy, e.g. on exception is a pain to get req reponse body
+ - aop 10km stacktrace
